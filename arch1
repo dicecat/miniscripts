@@ -1,0 +1,48 @@
+#/usr/bin/bash
+
+############ prep ############
+
+## enable ssh
+#nano /etc/ssh/sshd_config
+#passwd
+#systemctl start sshd
+
+## check interfaces
+#ip a
+## set wifi
+#wifi-menu -o
+## set wired
+#ip link set enp* up
+#ip address add 192.168.xxx.xxx/24 broadcast + dev enp*
+#ip route add default via 192.168.xxx.xxx
+#nano /etc/resolv.conf
+#    nameserver 192.168.xxx.xxx
+## check network
+#ping baidu.com
+
+## https://wiki.archlinux.org/index.php/Partitioning#Example_layouts
+#ls /sys/firmwre/efi
+#cfdisk
+#mkfs.ext4 /dev/sdaX
+#mount /dev/sdaX /mnt
+#mkswap /dev/sdaY
+#swapon /dev/sdaY
+
+############ step ############
+
+timedatectl set-ntp true
+curl -sL4 'https://www.archlinux.org/mirrorlist/?country=CN&protocol=http&ip_version=4' > /etc/pacman.d/mirrorlist
+sed -i '/.*Server.*/ s/^#//' /etc/pacman.d/mirrorlist 
+pacstrap /mnt base base-devel linux linux-firmware
+genfstab -U /mnt >> /mnt/etc/fstab
+
+## download scripts
+#curl -sL4 'https://git.io/JvmoA' -oarch1
+curl -sOL4 'https://raw.githubusercontent.com/dicecat/miniscripts/master/arch2'
+curl -sOL4 'https://raw.githubusercontent.com/dicecat/miniscripts/master/arch3'
+curl -sOL4 'https://raw.githubusercontent.com/dicecat/miniscripts/master/arch4'
+chmod +x arch*
+mv arch* /mnt/root
+
+arch-chroot /mnt "/root/arch2"
+arch-chroot /mnt

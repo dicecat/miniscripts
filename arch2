@@ -1,0 +1,59 @@
+#/usr/bin/bash
+
+echo ""
+echo "Now in arch-chroot..."
+echo ""
+
+pacman --noconfirm -S networkmanager nano man-db intel-ucode grub
+systemctl enable NetworkManager
+
+#dd if=/dev/zero of=/swapfile bs=1M count=8192 status=progress
+fallocate -l 8G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+echo '/swapfile none swap defaults 0 0' >>/etc/fstab
+# enable trim on ssd
+sed -i '/.*relatime.*/ s/relatime/noatime,discard/' /etc/fstab
+
+ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+hwclock --systohc --localtime
+
+echo 'en_US.UTF-8 UTF-8' >>/etc/locale.gen
+echo 'zh_CN.UTF-8 UTF-8' >>/etc/locale.gen
+echo 'zh_HK.UTF-8 UTF-8' >>/etc/locale.gen
+echo 'zh_TW.UTF-8 UTF-8' >>/etc/locale.gen
+locale-gen
+echo LANG=en_US.UTF-8 >/etc/locale.conf
+
+echo 'ARCH' > /etc/hostname
+echo '127.0.0.1       localhost' >> /etc/hosts
+echo '::1             localhost' >> /etc/hosts
+echo '127.0.1.1       ARCH.localdomain  ARCH' >> /etc/hosts
+
+#mkdir /mnt1 /mnt2
+#mount /dev/sdX1 /mnt1
+#mount /dev/sdX2 /mnt2
+#os-prober
+grub-install /dev/sda
+#tweak grub
+sed -i 's/.*GRUB_TIMEOUT=.*/GRUB_TIMEOUT=1/' /etc/default/grub
+sed -i 's/.*GRUB_TIMEOUT_STYLE=.*/GRUB_TIMEOUT_STYLE=countdown/' /etc/default/grub
+sed -i '/GRUB_CMDLINE_LINUX_DEFAULT/ s/loglevel=3 quiet/\.\.\. splash/' /etc/default/grub
+#gen cfg
+grub-mkconfig -o /boot/grub/grub.cfg
+
+#nano /etc/sudoers
+#%wheel ALL=(ALL)ALL <- uncomment
+sed -i '/.*wheel ALL=(ALL) ALL.*/ s/^#//' /etc/sudoers
+
+read -p "Enter username: " username
+useradd -m -G wheel "${username}"
+
+clear
+echo "Please set up passwords, ^D, and reboot!"
+echo -e "passwd ${username}"
+echo "passwd"
+echo "^D"
+#umount -R /mnt
+echo "reboot"

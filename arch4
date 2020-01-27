@@ -1,0 +1,71 @@
+#/usr/bin/bash
+
+if [ `whoami` == "root" ]; then
+    echo "Run as non-root user!!"
+    exit 1
+fi
+
+# some packages [archlinuxcn]
+sudo pacman --noconfirm -S yay google-chrome visual-studio-code-bin
+# sogou pinyin [archlinuxcn]
+sudo pacman --noconfirm -S fcitx-configtool fcitx-qt5 fcitx-lilydjwg-git fcitx-sogoupinyin
+
+# input method: other options
+#fcitx [archlinux]; cannot change im by shift & need to ctrl+shift first
+#(fcitx-im)= fcitx-qt5 fcitx fcitx-gtk2 fcitx-gtk3
+#pacman -S fcitx-configtool fcitx-im
+#fcitx [archlinuxcn]
+#pacman -S fcitx-configtool fcitx-qt5 fcitx-lilydjwg-git
+
+#input method config
+cat >>~/.xprofile<<EOF
+# input method
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+EOF
+
+# config bing wallpaper
+yay --noconfirm -S bing-wallpaper-git
+sudo chmod 777 /var/cache/image-blur /usr/share/wallpapers/deepin
+cat >>~/.xprofile<<EOF
+# update wallpaper
+rm -rf /home/henry/Pictures/Bing/*
+bing-wallpaper
+mv /home/henry/Pictures/Bing/* /home/henry/Pictures/Bing/desktop.jpg
+rm -rf /var/cache/image-blur/*
+cp -f /home/henry/Pictures/Bing/desktop.jpg /usr/share/wallpapers/deepin/desktop.jpg
+gsettings set com.deepin.dde.appearance background-uris "['file:///usr/share/wallpapers/deepin/desktop.jpg', 'file:///usr/share/wallpapers/deepin/Sunset_of_the_Lake_Nam_by_Wang_Jinyu.jpg']"
+EOF
+
+# update bashrc
+sed -i '/.*alias.*/d' ~/.bashrc
+cat >>~/.bashrc<<EOF
+alias dmesg='dmesg --color'
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+alias la='ll -a'
+EOF
+
+# config git
+#git config --global user.name ***
+#git config --global user.email ***
+
+# additional aur packages
+yay --noconfirm -S ao p3x-onenote
+
+# office
+#pacman -S libreoffice-fresh-zh-cn
+
+# gui firewall
+#pacman -S gufw 
+
+# gpu drivers
+#(nvidia-utils, req by) nvidia lib32-nvidia-utils
+#(dual gpu switch) optimus-manager-qt
+# steam
+#(steam, req by) steam-native-runtime
+#(other req to properly start steam) ttf-liberation wqy-zenhei
+# lutris
+# https://superuser.com/questions/1276485/configure-ssh-key-path-to-use-for-a-specific-host

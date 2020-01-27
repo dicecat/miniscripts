@@ -1,0 +1,93 @@
+#/usr/bin/bash
+
+if [ `whoami` != "root" ]; then
+    echo "Run as root!!"
+    exit 1
+fi
+
+ping -c3 baidu.com
+if [ $? != 0 ]; then
+    echo "Run nmtui to set up network first!!"
+    exit 1
+fi
+
+# dde; group 'extra':
+# deepin-boot-maker	5.0.1-1	Tool to create a bootable usb stick quick and easy	2019-07-30	
+# deepin-calculator	5.0.1-1	An easy to use calculator for ordinary users	2019-07-30	
+# deepin-clone	5.0.1-1	Disk and partition backup/restore tool	2019-07-30	
+# deepin-community-wallpapers	1:1.7.7-1	Community wallpapers for DDE	2019-03-11	
+# deepin-draw	1.0.0-2	A lightweight drawing tool for Linux Deepin	2018-10-18	
+# deepin-editor	1.2.6.4-1	Simple editor for Deepin	2019-05-07	
+# deepin-movie	1:5.0.0-2	Movie player based on QtAV	2019-10-07	
+# deepin-music	5.0.1-2	Awesome music player with brilliant and tweakful UI Deepin-UI based.	2019-11-14	
+# deepin-picker	5.0.1-1	Color picker tool for deepin	2019-07-30	
+# deepin-screen-recorder	5.0.0-1	Deepin Screen Recorder	2019-07-30	
+# deepin-screensaver-pp	0.0.4-1	Optional PP screensaver resource for deepin screensaver	2019-05-07	
+# deepin-screenshot	5.0.0-1	Easy-to-use screenshot tool for linuxdeepin desktop environment	2019-07-30	
+# deepin-terminal	5.0.0-1	Default terminal emulation application for Deepin	2019-07-30	
+# deepin-voice-recorder	5.0.0-1	Deepin Voice Recorder	2019-07-30
+pacman --noconfirm -S deepin deepin-screenshot deepin-terminal
+systemctl enable lightdm
+
+# fonts
+#opendesktop-fonts
+#wqy-bitmapfont
+#wqy-microhei
+#wqy-microhei-lite
+#wqy-zenhei
+#ttf-arphic-ukai
+#ttf-arphic-uming
+#adobe-source-han-sans-cn-fonts
+#adobe-source-han-serif-cn-fonts
+#noto-fonts-cjk
+#noto-fonts-emoji
+#noto-fonts-extra
+#noto-fonts < deepin-daemon
+#ttf-dejavu
+#ttf-droid
+#ttf-fira-code
+#ttf-inconsolata
+#ttf-liberation
+#ttf-linux-libertine
+#ttf-roboto
+pacman --noconfirm -S ttf-dejavu ttf-liberation \
+noto-fonts-cjk noto-fonts-emoji noto-fonts-extra \
+wqy-bitmapfont wqy-microhei wqy-microhei-lite wqy-zenhei
+
+# nano /etc/pacman.conf
+# enable color
+sed -i 's/#Color/Color/g' /etc/pacman.conf
+# add repo
+sed -i '/.*multilib\].*/ s/^#//' /etc/pacman.conf 
+sed -i '/.*multilib\].*/,+1{/.*multilib\].*/ n; s/^#//}' /etc/pacman.conf
+echo '[archlinuxcn]' >>/etc/pacman.conf
+echo 'Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch' >>/etc/pacman.conf
+echo 'Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch' >>/etc/pacman.conf
+echo 'Server = https://repo.archlinuxcn.org/$arch' >>/etc/pacman.conf
+
+# add keyring
+pacman -Syy
+rm -fr /etc/pacman.d/gnupg
+pacman-key --init
+pacman-key --populate archlinux
+#pacman-key --populate archlinuxcn
+pacman --noconfirm -S archlinuxcn-keyring
+#pacman -Syu
+
+reboot
+
+## settings ##
+#avatar, scaling, font, wired link, time, turn off 'Suspend on lid close', boot
+#dock -> size -> large
+#terminal -> theme
+
+# https://blog.csdn.net/sinat_33528967/article/details/93380729
+# windows fonts
+#sudo mkdir /usr/share/fonts/winfonts/
+#sudo cp win_font_path/* /usr/share/fonts/winfonts/
+#cd /usr/share/fonts/winfonts/
+#rm *.fon
+#sudo mkfontscale
+#sudo mkfontdir
+#fc-cache -fv
+
