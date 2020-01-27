@@ -53,7 +53,7 @@ EOF
 #git config --global user.email ***
 
 # additional aur packages
-yay --noconfirm -S ao p3x-onenote
+yay --noconfirm -S ao p3x-onenote persepolis
 
 # office
 #pacman -S libreoffice-fresh-zh-cn
