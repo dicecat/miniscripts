@@ -49,6 +49,7 @@ alias la='ll -a'
 EOF
 
 # config git
+# https://stackoverflow.com/questions/34400272/visual-studio-code-always-asking-for-git-credentials/52298381
 #git config --global user.name ***
 #git config --global user.email ***
 #disable git fetch in vscode to save git password
