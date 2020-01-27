@@ -52,6 +52,8 @@ EOF
 #git config --global user.name ***
 #git config --global user.email ***
 
+# config ssh connections
+
 # additional aur packages
 yay --noconfirm -S ao p3x-onenote persepolis
 
