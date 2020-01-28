@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-if [ `whoami` == "root" ]; then
+cur_user=`whoami`
+if [ ${cur_user} == "root" ]; then
     echo "Run as non-root user!!"
     exit 1
 fi
@@ -30,11 +31,23 @@ yay --noconfirm -S bing-wallpaper-git
 sudo chmod 777 /var/cache/image-blur /usr/share/wallpapers/deepin
 cat >>~/.xprofile<<EOF
 # update wallpaper
-rm -rf /home/henry/Pictures/Bing/*
+bash ~/.wallpaper
+EOF
+cat >~/.wallpaper<<EOF
+#!/usr/bin/bash
+if [[ -s /home/${cur_user}/Pictures/Bing/desktop.jpg ]]; then
+    picdate=`date +%Y%m%d -r/home/${cur_user}/Pictures/Bing/desktop.jpg`
+    curdate=`date +%Y%m%d`
+    if [ ${curdate} -le ${picdate} ]; then
+        #echo "no need to update"
+        exit 0
+    fi
+fi
+rm -rf /home/${cur_user}/Pictures/Bing/*
 bing-wallpaper
-mv /home/henry/Pictures/Bing/* /home/henry/Pictures/Bing/desktop.jpg
+mv /home/${cur_user}/Pictures/Bing/* /home/${cur_user}/Pictures/Bing/desktop.jpg
 rm -rf /var/cache/image-blur/*
-cp -f /home/henry/Pictures/Bing/desktop.jpg /usr/share/wallpapers/deepin/desktop.jpg
+cp -f /home/${cur_user}/Pictures/Bing/desktop.jpg /usr/share/wallpapers/deepin/desktop.jpg
 gsettings set com.deepin.dde.appearance background-uris "['file:///usr/share/wallpapers/deepin/desktop.jpg', 'file:///usr/share/wallpapers/deepin/Sunset_of_the_Lake_Nam_by_Wang_Jinyu.jpg']"
 EOF
 
@@ -49,7 +62,6 @@ alias la='ll -a'
 EOF
 
 # config git
-# https://stackoverflow.com/questions/34400272/visual-studio-code-always-asking-for-git-credentials/52298381
 #git config --global user.name ***
 #git config --global user.email ***
 #git config --global credential.helper store
