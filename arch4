@@ -73,6 +73,8 @@ EOF
 # additional aur packages
 yay --noconfirm -S ao p3x-onenote persepolis
 
+rm -f /home/${cur_user}/arch*
+
 # office
 #pacman -S libreoffice-fresh-zh-cn
 
