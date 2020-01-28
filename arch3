@@ -74,7 +74,7 @@ pacman-key --populate archlinux
 pacman --noconfirm -S archlinuxcn-keyring
 #pacman -Syu
 
-reboot
+#reboot
 
 ## settings ##
 #avatar, scaling, font, wired link, time, turn off 'Suspend on lid close', boot

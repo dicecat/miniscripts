@@ -49,11 +49,18 @@ sed -i '/.*wheel ALL=(ALL) ALL.*/ s/^#//' /etc/sudoers
 
 read -p "Enter username: " username
 useradd -m -G wheel "${username}"
+chown "${username}":"${username}" /root/arch*
+mv /root/arch* /home/${username}
 
 clear
-echo "Please set up passwords, ^D, and reboot!"
+echo "1. Set up passwords:"
 echo -e "passwd ${username}"
 echo "passwd"
+echo "2. Reboot:"
 echo "^D"
+echo "reboot"
+echo "3. DDE & additional packages:"
+echo "sudo bash arch3"
+echo "bash arch4"
 #umount -R /mnt
 echo "reboot"

@@ -6,6 +6,17 @@ if [ ${cur_user} == "root" ]; then
     exit 1
 fi
 
+# update bashrc
+sed -i '/.*alias.*/d' ~/.bashrc
+cat >>~/.bashrc<<EOF
+alias dmesg='dmesg --color'
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias ll='ls -lh'
+alias la='ll -a'
+EOF
+sudo cp -f ~/.bashrc /root
+
 # some packages [archlinuxcn]
 sudo pacman --noconfirm -S yay google-chrome visual-studio-code-bin
 # sogou pinyin [archlinuxcn]
@@ -49,16 +60,6 @@ mv /home/${cur_user}/Pictures/Bing/* /home/${cur_user}/Pictures/Bing/desktop.jpg
 rm -rf /var/cache/image-blur/*
 cp -f /home/${cur_user}/Pictures/Bing/desktop.jpg /usr/share/wallpapers/deepin/desktop.jpg
 gsettings set com.deepin.dde.appearance background-uris "['file:///usr/share/wallpapers/deepin/desktop.jpg', 'file:///usr/share/wallpapers/deepin/Sunset_of_the_Lake_Nam_by_Wang_Jinyu.jpg']"
-EOF
-
-# update bashrc
-sed -i '/.*alias.*/d' ~/.bashrc
-cat >>~/.bashrc<<EOF
-alias dmesg='dmesg --color'
-alias grep='grep --color=auto'
-alias ls='ls --color=auto'
-alias ll='ls -lh'
-alias la='ll -a'
 EOF
 
 # config git
