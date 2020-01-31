@@ -4,8 +4,10 @@ echo ""
 echo "Now in arch-chroot..."
 echo ""
 
-pacman --noconfirm -S networkmanager nano man-db intel-ucode grub
+pacman --noconfirm -S networkmanager nano-syntax-highlighting man-db intel-ucode grub
 systemctl enable NetworkManager
+# colors in nano
+sed -i '/.*share.*/ s/^#//' /etc/nanorc
 
 #dd if=/dev/zero of=/swapfile bs=1M count=8192 status=progress
 fallocate -l 8G /swapfile
