@@ -7,16 +7,9 @@ if [ ${cur_user} == "root" ]; then
 fi
 
 # update bashrc
-#sed -i '/.*alias.*/d' ~/.bashrc
-#sed -i 's/\(.*PS1.*\)/#\1/' ~/.bashrc
-cat >~/.bashrc<<EOF
-#
-# ~/.bashrc
-#
-
-# If not running interactively, don't do anything
-[[ $- != *i* ]] && return
-
+sed -i '/.*alias.*/d' ~/.bashrc
+sed -i 's/\(.*PS1.*\)/#\1/' ~/.bashrc
+cat >>~/.bashrc<<EOF
 alias dmesg='dmesg --color'
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
