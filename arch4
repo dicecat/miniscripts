@@ -119,3 +119,19 @@ rm -f /home/${cur_user}/arch*
 #     PS1+="${BBlu}\w ${BYel}\\$ ${RCol}"
 # }
 # export PROMPT_COMMAND=__prompt_command
+
+# # anbox
+# # https://github.com/anbox/anbox/issues/3
+# sudo pacman -S linux-headers dkms
+# yay -S anbox-git anbox-image anbox-modules-dkms-git
+# sudo modprobe ashmem_linux
+# sudo modprobe binder_linux
+# sudo systemctl enable anbox-container-manager.service
+
+# # https://wiki.archlinux.org/index.php/Anbox
+# core: linux-headers
+# CN: anbox-git anbox-image anbox-modules-dkms-git
+# AUR: anbox-bridge
+
+# dkms < anbox-modules-dkms-git
+# anbox-image < anbox-git

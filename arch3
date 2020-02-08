@@ -31,6 +31,9 @@ fi
 # cifs-utils SMB sharing support
 pacman --noconfirm -S deepin deepin-screenshot deepin-terminal ntfs-3g exfat-utils cifs-utils
 systemctl enable lightdm
+# fix grub boot error prompt when grub-mkconfig again
+mv /etc/grub.d/35_deepin_gfxmode /etc/grub.d/35_deepin_gfxmode.obsolete
+mv /etc/default/grub.d/10_deepin.cfg /etc/default/grub.d/10_deepin.cfg.obsolete
 
 # fonts
 #opendesktop-fonts
