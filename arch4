@@ -91,6 +91,7 @@ rm -f /home/${cur_user}/arch*
 
 # office
 #pacman -S libreoffice-fresh-zh-cn
+#pacman -S wps-office ttf-wps-fonts wps-office-mui-zh-cn
 
 # gui firewall
 #pacman -S gufw 
